@@ -7,7 +7,8 @@ struct SwiftLintPlugin: BuildToolPlugin {
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
         let arguments = arguments(
             packageDirectory: context.package.directory.string,
-            targetDirectory: target.directory.string
+            targetDirectory: target.directory.string,
+            targetName: target.name
         )
         return [
             .buildCommand(
@@ -19,17 +20,19 @@ struct SwiftLintPlugin: BuildToolPlugin {
         ]
     }
 
-    func arguments(packageDirectory: String, targetDirectory: String) -> [String] {
+    func arguments(packageDirectory: String, targetDirectory: String, targetName: String) -> [String] {
         var arguments = [
             "lint",
             "--no-cache"
         ]
 
-        let lintConfigFilePath = "\(packageDirectory)/.swiftlint.yml"
-        if FileManager.default.fileExists(atPath: lintConfigFilePath) {
-            arguments.append(
-                contentsOf: ["--config", lintConfigFilePath]
-            )
+        let lintConfigFilePath = [
+            "\(packageDirectory)/.swiftlint-\(targetName).yml",
+            "\(packageDirectory)/.swiftlint.yml"
+        ].first(where: FileManager.default.fileExists)
+
+        if let lintConfigFilePath {
+            arguments.append(contentsOf: ["--config", lintConfigFilePath])
         }
 
         arguments.append(targetDirectory)
