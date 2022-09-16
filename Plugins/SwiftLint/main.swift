@@ -22,7 +22,7 @@ struct SwiftLintPlugin: BuildToolPlugin {
     func arguments(packageDirectory: String, targetDirectory: String) -> [String] {
         var arguments = [
             "lint",
-            "--in-process-sourcekit"
+            "--no-cache"
         ]
 
         let lintConfigFilePath = "\(packageDirectory)/.swiftlint.yml"

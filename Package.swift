@@ -27,7 +27,7 @@ let package = Package(
         ),
         .binaryTarget(
             name: "SwiftLintBinary",
-            path: "SwiftLintBinary.artifactbundle.zip"
+            path: "EmbededBundles/SwiftLintBinary.artifactbundle.zip"
         )
     ]
 )
